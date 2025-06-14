@@ -2,7 +2,7 @@ const { z } = require('zod')
 
 const createUserValidator = z.object({
   name: z.string().min(3).max(50).trim(),
-  username: z.string().min(4).max(50).trim(),
+  username: z.string().min(4).max(50).trim().regex(/^[a-zA-Z0-9-]+$/, "Username can only contain letters, numbers, and hyphens"),
   email: z.string().email().trim(),
   password: z.string(),
   plan: z.enum(['paid', 'free']).default('free'),

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const userSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name Required to create a User"]
@@ -26,7 +26,8 @@ const userSchema = mongoose.Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    match: [ /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Please provide a valid email address"]
+    match: [ /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Please provide a valid email address"],
+    select: false
   },
   
   password: {
@@ -91,5 +92,5 @@ const userSchema = mongoose.Schema({
 })
 
 
-const userModel = mongoose.model("User", userSchema)
+const userModel = mongoose.model("User", UserSchema)
 module.exports = userModel
