@@ -60,6 +60,16 @@ class UserRepository {
     }
   }
 
+  async deleteUser (username) {
+    try {
+      const deletedUser = await User.findOneAndDelete({username})
+      return deletedUser
+
+    } catch (error) {
+      throw error
+    }
+  }
+
 }
 
 return UserRepository
