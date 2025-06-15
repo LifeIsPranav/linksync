@@ -4,7 +4,7 @@ class UserRepository {
 
   async createUser (userData) {
     try {
-      const user = await User.create({userData})
+      const user = await User.create(userData)
       return user
 
     } catch (error) {
@@ -15,6 +15,26 @@ class UserRepository {
   async getUserByEmail (email) {
     try {
       const user = await User.findOne({email})
+      return user
+
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getUserWithPassEmail (email) {
+    try {
+      const user = await User.findOne({email}).select('password')
+      return user
+
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getUserWithPassUsername (username) {
+    try {
+      const user = await User.findOne({username}).select('password')
       return user
 
     } catch (error) {
