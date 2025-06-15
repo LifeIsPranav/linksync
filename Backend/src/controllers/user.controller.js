@@ -40,8 +40,26 @@ const signup  = async (req, res) => {
 
 const login  = async (req, res) => {
   try {
-    const user = await userService.create({userData})
-    return user
+
+    const { username, email, password } = req.body
+
+    if(!username && !email) {
+      throw new BadRequest('Invalid Credentials', 'Kindly Send Email/Username')
+    }
+    if(!password) {
+      throw new BadRequest('Password Missing', 'Kindly Send Password')
+    }
+
+    const user = await userService.loginUser({username, email, password})
+
+    const token = jwt.sign(
+      { userId: user._id }, 
+      JWT_SECRET_KEY,
+      { expiresIn: '1h' }
+    )
+
+    res.cookie('token', token, cookieConfig)
+    responseHandler(req, res, StatusCodes.OK, 'User Login Successfully', user)
 
   } catch (error) {
     throw error
