@@ -26,7 +26,9 @@ class UserService {
   async loginUser (details) {
     try {
       const { username, email, password } = details
-      const user = await this.UserRepository.getUserWithPassEmail(email)
+      let user
+      if(email) user = await this.UserRepository.getUserWithPassEmail(email)
+      else user = await this.UserRepository.getUserWithPassUsername(username)
   
       if(!user) {
         throw new NotFound()
@@ -45,24 +47,13 @@ class UserService {
     }
   }
 
-  async getUserByEmail (email) {
+  async getUser (data) {
     try {
-      const user = await this.UserRepository.getUserByEmail(email)
+      const { username, email } = data
 
-      if(!user) {
-        throw new NotFound()
-      }
-
-      return user
-
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async getUserByUsername (username) {
-    try {
-      const user = await this.UserRepository.getUserByUsername(username)
+      let user
+      if(email) user = await this.UserRepository.getUserByEmail(email)
+      else user = await this.UserRepository.getUserByUsername(username)
 
       if(!user) {
         throw new NotFound()

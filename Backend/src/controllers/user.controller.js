@@ -66,10 +66,11 @@ const login  = async (req, res) => {
   }
 }
 
+
 const logout  = async (req, res) => {
   try {
-    const user = await userService.create({userData})
-    return user
+    res.clearCookie('token')
+    responseHandler(req, res, StatusCodes.OK, 'User Logged out Successfully')
 
   } catch (error) {
     throw error
@@ -79,8 +80,13 @@ const logout  = async (req, res) => {
 
 const getUserDet  = async (req, res) => {
   try {
-    const user = await userService.findOne({username})
-    return user
+    const { username, email } = req.params || req.body
+    if(!username && !email){
+      throw new BadRequest('Invalid Credentials', 'Kindly Send Email/Username')
+    }
+
+    const user = await userService.getUser({ username, email })
+    responseHandler(req, res, StatusCodes.OK, 'Details fetched Successfully', user)
 
   } catch (error) {
     throw error
