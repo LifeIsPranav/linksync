@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 
 const { serverConfig, connectDB } = require('./config')
 const apiRouter = require('./routes')
+const errorHandler = require('./utils/errorHandler')
 
 const app = express()
 const PORT = serverConfig.PORT
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', apiRouter)
 
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`Backend Successfully Connected at: http://localhost:${PORT} 🔥`);

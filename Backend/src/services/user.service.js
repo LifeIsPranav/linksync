@@ -1,6 +1,7 @@
+const BadRequest = require("../errors/clientSide/badRequest.error")
 const NotFound = require("../errors/clientSide/notFound.error")
 const InternalServerError = require("../errors/serverSide/internalServer.error")
-
+const bcrypt = require('bcrypt')
 
 class UserService {
   constructor(UserRepository) {
@@ -8,94 +9,117 @@ class UserService {
   }
 
   async createUser (userData) {
-      try {
-        const user = await this.UserRepository.createUser(userData)
-        
-        if(!user) {
-          throw new InternalServerError('User Not Created')
-        }
-
-        return user
-  
-      } catch (error) {
-        throw error
+    try {
+      const user = await this.UserRepository.createUser(userData)
+      
+      if(!user) {
+        throw new InternalServerError('User Not Created')
       }
+
+      return user
+
+    } catch (error) {
+      throw error
     }
-  
-    async getUserByEmail (email) {
-      try {
-        const user = await this.UserRepository.getUserByEmail(email)
+  }
 
-        if(!user) {
-          throw new NotFound()
-        }
-
-        return user
+  async loginUser (details) {
+    try {
+      const { username, email, password } = details
+      const user = await this.UserRepository.getUserWithPassEmail(email)
   
-      } catch (error) {
-        throw error
+      if(!user) {
+        throw new NotFound()
       }
-    }
-  
-    async getUserByUsername (username) {
-      try {
-        const user = await this.UserRepository.getUserByUsername(username)
 
-        if(!user) {
-          throw new NotFound()
-        }
-
-        return user
-  
-      } catch (error) {
-        throw error
+      const isMatch = await bcrypt.compare(password, user.password)
+      if(!isMatch) {
+        throw new BadRequest('Invalid Credentials Provided')
       }
+
+      user.password = undefined;
+      return user;
+
+    } catch (error) {
+      throw error
     }
-  
-    async updateDetails (username, updateData) {
-      try {
-        const updatedUser = await this.UserRepository.updateDetails(username, updateData)
+  }
 
-        if(!user) {
-          throw new NotFound()
-        }
+  async getUserByEmail (email) {
+    try {
+      const user = await this.UserRepository.getUserByEmail(email)
 
-        return updatedUser
-  
-      } catch (error) {
-        throw error
+      if(!user) {
+        throw new NotFound()
       }
+
+      return user
+
+    } catch (error) {
+      throw error
     }
-  
-    async updatePassword (username, password) {
-      try {
-        const updatedUser = await this.UserRepository.updatePassword(username, password)
+  }
 
-        if(!user) {
-          throw new NotFound()
-        }
+  async getUserByUsername (username) {
+    try {
+      const user = await this.UserRepository.getUserByUsername(username)
 
-        return updatedUser
-  
-      } catch (error) {
-        throw error
+      if(!user) {
+        throw new NotFound()
       }
+
+      return user
+
+    } catch (error) {
+      throw error
     }
-  
-    async deleteUser (username) {
-      try {
-        const deletedUser = await this.UserRepository.deleteUser(username)
+  }
 
-        if(!user) {
-          throw new NotFound()
-        }
+  async updateDetails (username, updateData) {
+    try {
+      const updatedUser = await this.UserRepository.updateDetails(username, updateData)
 
-        return deletedUser
-  
-      } catch (error) {
-        throw error
+      if(!user) {
+        throw new NotFound()
       }
+
+      return updatedUser
+
+    } catch (error) {
+      throw error
     }
+  }
+
+  async updatePassword (username, password) {
+    try {
+      const updatedUser = await this.UserRepository.updatePassword(username, password)
+
+      if(!user) {
+        throw new NotFound()
+      }
+
+      return updatedUser
+
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async deleteUser (username) {
+    try {
+      const deletedUser = await this.UserRepository.deleteUser(username)
+
+      if(!user) {
+        throw new NotFound()
+      }
+
+      return deletedUser
+
+    } catch (error) {
+      throw error
+    }
+  }
+  
 }
 
 
