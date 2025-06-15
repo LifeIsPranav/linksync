@@ -52,10 +52,10 @@ class UserRepository {
     }
   }
 
-  async updateDetails (username, updateData) {
+  async updateDetails (userId, updateData) {
     try {
-      const updatedUser = await User.findOneAndUpdate(
-        {username},
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
         {$set: updateData},
         {new: true, runValidators: true}
       )

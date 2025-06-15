@@ -66,11 +66,10 @@ class UserService {
     }
   }
 
-  async updateDetails (username, updateData) {
+  async updateDetails (userId, updateData) {
     try {
-      const updatedUser = await this.UserRepository.updateDetails(username, updateData)
-
-      if(!user) {
+      const updatedUser = await this.UserRepository.updateDetails(userId, updateData)
+      if(!updatedUser) {
         throw new NotFound()
       }
 

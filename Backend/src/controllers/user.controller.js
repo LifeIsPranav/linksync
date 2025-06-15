@@ -95,12 +95,13 @@ const getUserDet  = async (req, res) => {
 
 const updateUser  = async (req, res) => {
   try {
-    const updatedUser = await userService.findOneAndUpdate(
-      {username},
-      {$set: updateData},
-      {new: true, runValidators: true}
-    )
-    return updatedUser
+    const { success, data, error } = userValidators.updateUserValidator.safeParse(req.body)
+    if(!success){
+      throw new BadRequest('Inconsistent Properties Received', error)
+    }
+
+    const updatedUser = await userService.updateDetails(req.userId, data)
+    responseHandler(req, res, StatusCodes.OK, 'User Updated Successfully', updatedUser)
 
   } catch (error) {
     throw error
