@@ -1,10 +1,13 @@
 const express = require('express')
-const serverConfig = require('./config')
+const cookieParser = require('cookie-parser')
+
+const { serverConfig, connectDB } = require('./config')
 const apiRouter = require('./routes')
 
 const app = express()
 const PORT = serverConfig.PORT
 
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.text())
 app.use(express.urlencoded({ extended: true }))
@@ -18,4 +21,5 @@ app.use('/api', apiRouter)
 
 app.listen(PORT, () => {
   console.log(`Backend Successfully Connected at: http://localhost:${PORT} 🔥`);
+  connectDB()
 })

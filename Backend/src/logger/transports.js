@@ -1,7 +1,7 @@
 const winston = require("winston");
 
 const logFormat = require("./format");
-const { LOG_FILE_PATH } = require("../config");
+const { LOG_FILE_PATH } = require("./logger.config");
 
 
 const logTo = []

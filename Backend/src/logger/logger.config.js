@@ -1,5 +1,5 @@
-const { LOG_FILE_PATH } = require("../config");
+const { serverConfig } = require("../config")
 
 module.exports = {
-  LOG_FILE_PATH
+  LOG_FILE_PATH: serverConfig.LOG_FILE_PATH
 }

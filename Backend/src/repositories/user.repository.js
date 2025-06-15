@@ -72,4 +72,4 @@ class UserRepository {
 
 }
 
-return UserRepository
+module.exports = UserRepository
