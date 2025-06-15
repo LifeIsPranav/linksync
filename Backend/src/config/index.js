@@ -1,6 +1,5 @@
-require('dotenv').config()
-
 module.exports = {
-  PORT: process.env.PORT,
-  LOG_FILE_PATH: process.env.LOG_FILE_PATH
+  serverConfig: require('./serverConfig'),
+  cookieConfig: require('./cookieConfig'),
+  connectDB: require('./db.config')
 }
